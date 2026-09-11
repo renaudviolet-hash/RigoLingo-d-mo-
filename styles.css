@@ -1,0 +1,322 @@
+/* --- STYLE POLD V GAME / GAMER FUTURISTE --- */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at center, #1b123b 0%, #090514 100%);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* En-tête / Header */
+header {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(20, 15, 45, 0.85);
+  border: 2px solid #00f0ff;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+  border-radius: 15px;
+  padding: 15px 25px;
+  margin-bottom: 25px;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  background: linear-gradient(45deg, #00f0ff, #ff007f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
+  letter-spacing: 1px;
+}
+
+/* Bouton Retour */
+#btnRetour {
+  background: linear-gradient(135deg, #ff007f, #7928ca);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+  transition: 0.2s;
+}
+
+#btnRetour:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 0, 127, 0.8);
+}
+
+/* Cagnotte Pièces */
+.cagnotte {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+  transition: 0.2s;
+}
+
+.cagnotte:hover {
+  transform: scale(1.05);
+  background: rgba(255, 215, 0, 0.1);
+}
+
+/* Conteneur de pages */
+main {
+  width: 100%;
+  max-width: 800px;
+}
+
+.page {
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.page.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #00f0ff;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+/* Grilles et Cartes */
+.grille, .grille-niveaux {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  justify-content: center;
+}
+
+.card, .btn-niveau {
+  background: rgba(25, 20, 50, 0.9);
+  border: 2px solid #7928ca;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(121, 40, 202, 0.3);
+}
+
+.card:hover, .btn-niveau:hover {
+  border-color: #00f0ff;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+  transform: translateY(-3px);
+}
+
+.card-img {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-weight: bold;
+  color: #fff;
+}
+
+.btn-niveau {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+  width: 100%;
+}
+
+/* Fenêtre de jeu / Question */
+.card-jeu {
+  background: rgba(18, 13, 38, 0.95);
+  border: 2px solid #ff007f;
+  box-shadow: 0 0 25px rgba(255, 0, 127, 0.4);
+  border-radius: 15px;
+  padding: 30px;
+  text-align: center;
+}
+
+.avertissement {
+  background: rgba(231, 76, 60, 0.2);
+  border: 1px solid #e74c3c;
+  color: #ff6b6b;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.progression {
+  color: #00f0ff;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.sub-progression {
+  color: #b19cd9;
+  font-size: 0.85rem;
+  margin-bottom: 15px;
+}
+
+.card-jeu h3 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+/* Bouton Audio */
+.btn-audio {
+  background: rgba(121, 40, 202, 0.3);
+  border: 1px solid #7928ca;
+  color: #dcd0ff;
+  padding: 6px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: 0.2s;
+}
+
+.btn-audio:hover {
+  background: rgba(121, 40, 202, 0.6);
+  color: white;
+}
+
+/* Zone de réponse */
+.zone-reponse {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#saisieReponse {
+  background: rgba(5, 3, 15, 0.8);
+  border: 2px solid #00f0ff;
+  border-radius: 8px;
+  padding: 12px 15px;
+  color: white;
+  font-size: 1.1rem;
+  width: 60%;
+  outline: none;
+  box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+#saisieReponse:focus {
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.6), inset 0 0 10px rgba(0, 240, 255, 0.3);
+}
+
+.btn-valider, .btn-suivant {
+  background: linear-gradient(135deg, #00f0ff, #0077ff);
+  color: #000;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+  transition: 0.2s;
+}
+
+.btn-valider:hover, .btn-suivant:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.8);
+}
+
+.btn-suivant {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+  margin: 0 auto;
+  display: block;
+  box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
+}
+
+.message-resultat {
+  font-size: 1.1rem;
+  font-weight: bold;
+  min-height: 30px;
+  margin-top: 15px;
+}
+
+/* Page Récompenses / Boutique */
+.filtres {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.filtres select {
+  background: rgba(25, 20, 50, 0.9);
+  border: 2px solid #7928ca;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+}
+
+.liste-videos {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.video-card {
+  background: rgba(20, 15, 45, 0.9);
+  border: 2px solid #7928ca;
+  border-radius: 12px;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(121, 40, 202, 0.3);
+}
+
+.video-info h4 {
+  color: #00f0ff;
+  margin-bottom: 5px;
+}
+
+.video-info p {
+  color: #b19cd9;
+  font-size: 0.85rem;
+}
+
+.btn-buy {
+  background: linear-gradient(135deg, #ff007f, #7928ca);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 0, 127, 0.4);
+  transition: 0.2s;
+}
+
+.btn-buy:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 0, 127, 0.8);
+}
