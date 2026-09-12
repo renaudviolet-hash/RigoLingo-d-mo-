@@ -931,4 +931,112 @@ box-sizing: border-box;
 </script>
 
 </body>
-</html>
+</html> <!-- ONGLET ANNOUNCEMENTS (Sécurisé par le code administrateur) -->
+<div id="announcementsScreen" class="screen" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 20px; max-width: 450px; margin: 20px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+  
+  <!-- En-tête avec titre et badge de rôle dynamique -->
+  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 15px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 18px;">💬</span>
+      <h3 style="font-size: 16px; font-weight: bold; color: #1e293b; margin: 0;">Announcements</h3>
+    </div>
+    <div style="text-align: right;">
+      <span style="font-weight: bold; font-size: 13px; color: #0f172a;">POLD V GAME</span> 
+      <span id="userRoleBadge" style="background: #e2e8f0; color: #475569; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin-left: 5px;">Membre</span>
+    </div>
+  </div>
+
+  <!-- Zone d'affichage des messages -->
+  <div id="announcementsChatBox" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; height: 260px; padding: 12px; overflow-y: auto; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
+    
+    <!-- Message exemple -->
+    <div style="background: #f1f5f9; padding: 8px 12px; border-radius: 6px; border-left: 3px solid #3b82f6;">
+      <div style="font-size: 11px; color: #64748b; font-weight: bold; margin-bottom: 2px;">👑 Fondateur</div>
+      <p style="font-size: 13px; color: #1e293b; margin: 0;">Bienvenue sur l'espace d'annonces officiel !</p>
+    </div>
+
+  </div>
+
+  <!-- Zone de saisie : masquée par défaut pour les membres -->
+  <div id="inputSection" style="display: none; gap: 8px; margin-bottom: 8px;">
+    <input type="text" id="announcementInput" placeholder="Écris ton annonce ici..." style="flex: 1; padding: 10px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none;">
+    <button onclick="sendAnnouncement()" style="background: #38bdf8; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">Envoyer</button>
+  </div>
+
+  <!-- Statut et bouton pour entrer le code admin -->
+  <div style="text-align: center; font-size: 11px; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 6px;">
+    <span>🔒</span> 
+    <span id="accessStatusText">Accès Membre (Lecture seule)</span>
+    <button onclick="demanderCodeAdmin()" style="background: none; border: none; color: #2563eb; cursor: pointer; text-decoration: underline; font-size: 11px; padding: 0; margin-left: 5px;">Entrer le code admin</button>
+  </div>
+
+</div>
+
+<script>
+  // Code secret administrateur configuré à "admin103"
+  const CODE_ADMIN_SECRET = "admin103";
+  let isFounder = false;
+
+  function demanderCodeAdmin() {
+    if (isFounder) {
+      alert("Tu es déjà connecté en tant que Fondateur !");
+      return;
+    }
+
+    const saisie = prompt("Entre le code administrateur pour déverrouiller l'écriture :");
+    if (saisie === CODE_ADMIN_SECRET) {
+      isFounder = true;
+      updateRoleView();
+      alert("Code correct ! Accès Fondateur accordé.");
+    } else if (saisie !== null) {
+      alert("Code incorrect ! Accès refusé.");
+    }
+  }
+
+  function updateRoleView() {
+    const badge = document.getElementById("userRoleBadge");
+    const inputSection = document.getElementById("inputSection");
+    const statusText = document.getElementById("accessStatusText");
+
+    if (isFounder) {
+      badge.textContent = "Fondateur";
+      badge.style.background = "#fef08a";
+      badge.style.color = "#854d0e";
+      inputSection.style.display = "flex"; // Affiche la barre d'écriture
+      statusText.textContent = "Accès Fondateur (Écriture autorisée)";
+    } else {
+      badge.textContent = "Membre";
+      badge.style.background = "#e2e8f0";
+      badge.style.color = "#475569";
+      inputSection.style.display = "none"; // Cache la barre d'écriture
+      statusText.textContent = "Accès Membre (Lecture seule)";
+    }
+  }
+
+  function sendAnnouncement() {
+    if (!isFounder) return; // Double sécurité
+
+    const input = document.getElementById("announcementInput");
+    const text = input.value.trim();
+    if (text === "") return;
+
+    const chatBox = document.getElementById("announcementsChatBox");
+    const msgDiv = document.createElement("div");
+    msgDiv.style.cssText = "background: #f1f5f9; padding: 8px 12px; border-radius: 6px; border-left: 3px solid #3b82f6;";
+    
+    msgDiv.innerHTML = `
+      <div style="font-size: 11px; color: #64748b; font-weight: bold; margin-bottom: 2px;">👑 Fondateur</div>
+      <p style="font-size: 13px; color: #1e293b; margin: 0;"></p>
+    `;
+    msgDiv.querySelector("p").textContent = text;
+
+    chatBox.appendChild(msgDiv);
+    input.value = "";
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  // Initialisation au chargement de la page
+  window.addEventListener('DOMContentLoaded', () => {
+    updateRoleView();
+  });
+</script>
