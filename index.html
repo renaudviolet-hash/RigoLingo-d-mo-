@@ -931,10 +931,10 @@ box-sizing: border-box;
 </script>
 
 </body>
-</html> <!-- ONGLET ANNOUNCEMENTS (Sécurisé par le code administrateur) -->
+</html> <!-- ONGLET ANNOUNCEMENTS (Avec sauvegarde et partage automatique des messages) -->
 <div id="announcementsScreen" class="screen" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 20px; max-width: 450px; margin: 20px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
   
-  <!-- En-tête avec titre et badge de rôle dynamique -->
+  <!-- En-tête -->
   <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 15px;">
     <div style="display: flex; align-items: center; gap: 8px;">
       <span style="font-size: 18px;">💬</span>
@@ -948,22 +948,16 @@ box-sizing: border-box;
 
   <!-- Zone d'affichage des messages -->
   <div id="announcementsChatBox" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; height: 260px; padding: 12px; overflow-y: auto; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
-    
-    <!-- Message exemple -->
-    <div style="background: #f1f5f9; padding: 8px 12px; border-radius: 6px; border-left: 3px solid #3b82f6;">
-      <div style="font-size: 11px; color: #64748b; font-weight: bold; margin-bottom: 2px;">👑 Fondateur</div>
-      <p style="font-size: 13px; color: #1e293b; margin: 0;">Bienvenue sur l'espace d'annonces officiel !</p>
-    </div>
-
+    <!-- Les messages chargés s'afficheront ici -->
   </div>
 
-  <!-- Zone de saisie : masquée par défaut pour les membres -->
+  <!-- Zone de saisie : affichée uniquement si on est Fondateur -->
   <div id="inputSection" style="display: none; gap: 8px; margin-bottom: 8px;">
     <input type="text" id="announcementInput" placeholder="Écris ton annonce ici..." style="flex: 1; padding: 10px; font-size: 13px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none;">
     <button onclick="sendAnnouncement()" style="background: #38bdf8; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">Envoyer</button>
   </div>
 
-  <!-- Statut et bouton pour entrer le code admin -->
+  <!-- Bloc du bas toujours visible pour entrer le code admin -->
   <div style="text-align: center; font-size: 11px; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 6px;">
     <span>🔒</span> 
     <span id="accessStatusText">Accès Membre (Lecture seule)</span>
@@ -973,9 +967,14 @@ box-sizing: border-box;
 </div>
 
 <script>
-  // Code secret administrateur configuré à "admin103"
   const CODE_ADMIN_SECRET = "admin103";
   let isFounder = false;
+
+  // Au chargement, on récupère les messages sauvegardés et on met à jour l'affichage
+  window.addEventListener('DOMContentLoaded', () => {
+    chargerMessagesAnnonces();
+    updateRoleView();
+  });
 
   function demanderCodeAdmin() {
     if (isFounder) {
@@ -1002,41 +1001,74 @@ box-sizing: border-box;
       badge.textContent = "Fondateur";
       badge.style.background = "#fef08a";
       badge.style.color = "#854d0e";
-      inputSection.style.display = "flex"; // Affiche la barre d'écriture
+      inputSection.style.display = "flex";
       statusText.textContent = "Accès Fondateur (Écriture autorisée)";
     } else {
       badge.textContent = "Membre";
       badge.style.background = "#e2e8f0";
       badge.style.color = "#475569";
-      inputSection.style.display = "none"; // Cache la barre d'écriture
+      inputSection.style.display = "none";
       statusText.textContent = "Accès Membre (Lecture seule)";
     }
   }
 
+  // Fonction pour envoyer et sauvegarder l'annonce
   function sendAnnouncement() {
-    if (!isFounder) return; // Double sécurité
+    if (!isFounder) return;
 
     const input = document.getElementById("announcementInput");
     const text = input.value.trim();
     if (text === "") return;
 
-    const chatBox = document.getElementById("announcementsChatBox");
-    const msgDiv = document.createElement("div");
-    msgDiv.style.cssText = "background: #f1f5f9; padding: 8px 12px; border-radius: 6px; border-left: 3px solid #3b82f6;";
+    // Récupérer les messages existants ou créer une liste vide
+    let messages = JSON.parse(localStorage.getItem('pold_announcements')) || [];
     
-    msgDiv.innerHTML = `
-      <div style="font-size: 11px; color: #64748b; font-weight: bold; margin-bottom: 2px;">👑 Fondateur</div>
-      <p style="font-size: 13px; color: #1e293b; margin: 0;"></p>
-    `;
-    msgDiv.querySelector("p").textContent = text;
+    // Ajouter le nouveau message
+    messages.push({
+      auteur: "👑 Fondateur",
+      texte: text,
+      date: "À l'instant"
+    });
 
-    chatBox.appendChild(msgDiv);
+    // Sauvegarder dans le stockage du navigateur
+    localStorage.setItem('pold_announcements', JSON.stringify(messages));
+
     input.value = "";
-    chatBox.scrollTop = chatBox.scrollHeight;
+    chargerMessagesAnnonces(); // Recharger l'affichage
   }
 
-  // Initialisation au chargement de la page
-  window.addEventListener('DOMContentLoaded', () => {
-    updateRoleView();
-  });
+  // Fonction pour afficher tous les messages enregistrés
+  function chargerMessagesAnnonces() {
+    const chatBox = document.getElementById("announcementsChatBox");
+    chatBox.innerHTML = ""; // Vider la boîte avant de recharger
+
+    // Récupérer les messages sauvegardés (ou un message par défaut si vide)
+    let messages = JSON.parse(localStorage.getItem('pold_announcements'));
+    
+    if (!messages || messages.length === 0) {
+      messages = [{
+        auteur: "👑 Fondateur",
+        texte: "Bienvenue sur l'espace d'annonces officiel !",
+        date: "Aujourd'hui"
+      }];
+      localStorage.setItem('pold_announcements', JSON.stringify(messages));
+    }
+
+    // Créer les bulles pour chaque message
+    messages.forEach(msg => {
+      const msgDiv = document.createElement("div");
+      msgDiv.style.cssText = "background: #f1f5f9; padding: 8px 12px; border-radius: 6px; border-left: 3px solid #3b82f6;";
+      
+      msgDiv.innerHTML = `
+        <div style="font-size: 11px; color: #64748b; font-weight: bold; margin-bottom: 2px;">${msg.auteur}</div>
+        <p style="font-size: 13px; color: #1e293b; margin: 0;"></p>
+      `;
+      msgDiv.querySelector("p").textContent = msg.texte;
+
+      chatBox.appendChild(msgDiv);
+    });
+
+    // Faire défiler vers le bas
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
 </script>
